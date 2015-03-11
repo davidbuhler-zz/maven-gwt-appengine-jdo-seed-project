@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:HTMLPanel>
+		<div>
+			<h1>Plaid Suit</h1>
+		</div>
+		<g:Label ui:field="notificationBar"/>
+		<g:VerticalPanel ui:field="verticalPanel">
+			<g:HorizontalPanel>
+				<g:Button ui:field="addButton">Add</g:Button>
+				<g:Button ui:field="refreshButton">Refresh</g:Button>
+			</g:HorizontalPanel>
+		</g:VerticalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder>
