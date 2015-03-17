@@ -13,7 +13,7 @@ public class Contacts implements EntryPoint {
     private static final Logger LOG = Logger.getLogger(Contacts.class.getName());
 
     private void startApplication() {
-        IContactsServiceAsync rpcService = GWT.create(IContactsService.class);
+        ContactsServiceAsync rpcService = GWT.create(ContactsService.class);
         HandlerManager eventBus = new HandlerManager(null);
         AppController appViewer = new AppController(rpcService, eventBus);
         appViewer.go(RootPanel.get());

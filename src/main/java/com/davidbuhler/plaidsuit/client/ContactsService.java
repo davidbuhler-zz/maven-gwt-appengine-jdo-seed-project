@@ -8,9 +8,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import java.util.List;
 
 @RemoteServiceRelativePath("contactsService")
-public interface IContactsService extends RemoteService
+public interface ContactsService extends RemoteService
 {
-
 	ContactDTO saveContact(ContactDTO contactDTO) throws BroadCastableException;
 
 	Boolean deleteContact(String id)throws BroadCastableException;

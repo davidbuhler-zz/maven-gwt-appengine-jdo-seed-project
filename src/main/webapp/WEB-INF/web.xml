@@ -5,12 +5,12 @@
          version="3.1">
 	<servlet>
 		<servlet-name>contactsServiceServlet</servlet-name>
-		<servlet-class>com.davidbuhler.plaidsuit.server.ContactsService</servlet-class>
+		<servlet-class>com.davidbuhler.plaidsuit.server.ContactsServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>contactsServiceServlet</servlet-name>
-		<url-pattern>/product/contactsService</url-pattern>
+		<url-pattern>/plaidsuit/contactsService</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -20,7 +20,7 @@
 
 	<servlet-mapping>
 		<servlet-name>remoteLogging</servlet-name>
-		<url-pattern>/product/remote_logging</url-pattern>
+		<url-pattern>/plaidsuit/remote_logging</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>

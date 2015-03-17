@@ -21,13 +21,13 @@ import java.util.logging.Logger;
 public class AppController implements Presenter, ValueChangeHandler<String> {
 
     private final HandlerManager eventBus;
-    private final IContactsServiceAsync rpcService;
+    private final ContactsServiceAsync rpcService;
     private HasWidgets container;
     private ContactsView<ContactDTO> contactsView = null;
     private EditContactView editContactView = null;
     private static final Logger LOG = Logger.getLogger(AppController.class.getName());
 
-    public AppController(IContactsServiceAsync rpcService, HandlerManager eventBus) {
+    public AppController(ContactsServiceAsync rpcService, HandlerManager eventBus) {
         this.eventBus = eventBus;
         this.rpcService = rpcService;
         bind();

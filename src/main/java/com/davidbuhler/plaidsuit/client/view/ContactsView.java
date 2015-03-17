@@ -1,10 +1,10 @@
 package com.davidbuhler.plaidsuit.client.view;
 
-import com.davidbuhler.plaidsuit.client.IContactsServiceAsync;
-import com.davidbuhler.plaidsuit.server.ContactsService;
+import com.davidbuhler.plaidsuit.client.ContactsService;
+import com.davidbuhler.plaidsuit.client.ContactsServiceAsync;
+import com.davidbuhler.plaidsuit.shared.constants.UserMessages;
 import com.davidbuhler.plaidsuit.shared.dto.ContactDTO;
 import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,120 +17,146 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 
 import java.util.List;
+import java.util.logging.Logger;
 
-public class ContactsView<T> extends Composite implements IContactsView<T> {
+public class ContactsView<T> extends Composite implements IContactsView<T>
+{
+	public static final String CONTACT_NAME = "Name";
+	public static final String EMPTY_STRING = "";
+	public static final String REMOVE = "Remove";
+	private static ContactsViewUiBinder uiBinder = GWT.create(ContactsViewUiBinder.class);
+	private static final Logger LOG = Logger.getLogger(ContactsView.class.getName());
 
-    private static ContactsViewUiBinder uiBinder = GWT.create(ContactsViewUiBinder.class);
-    @UiField
-    VerticalPanel verticalPanel;
-    @UiField
-    Button addButton;
-    @UiField
-    Button refreshButton;
-    @UiField
-    Label notificationBar;
+	@UiField
+	VerticalPanel verticalPanel;
 
-    private Presenter<T> presenter;
+	@UiField
+	Button addButton;
 
-    public ContactsView() {
-        initWidget(uiBinder.createAndBindUi(this));
-    }
+	@UiField
+	Button refreshButton;
 
-    public void setPresenter(Presenter<T> presenter) {
-        this.presenter = presenter;
-    }
+	@UiField
+	Label notificationBar;
 
-    @Override
-    public void setRowData(List<T> rowData) {
-        buildTable();
-        table.setRowCount(rowData.size(), true);
-        table.setRowData(0, rowData);
+	private Presenter<T> _presenter;
+	private List<T> _rowData;
+	private CellTable _table;
 
-    }
+	public ContactsView()
+	{
+		initWidget(uiBinder.createAndBindUi(this));
+		buildTable();
+	}
 
-    @UiHandler("addButton")
-    void onAddButtonClicked(ClickEvent event) {
-        if (presenter != null) {
-            presenter.onAddButtonClicked();
-        }
-    }
+	public void setPresenter(Presenter<T> presenter)
+	{
+		this._presenter = presenter;
+	}
 
-    private CellTable table;
+	@Override
+	public void setRowData(List<T> rowData)
+	{
+		_rowData = rowData;
+		_table.setRowCount(_rowData.size(), true);
+		_table.setRowData(0, _rowData);
+	}
 
-    private void buildTable() {
-        table = new CellTable();
-        new ProvidesKey<ContactDTO>() {
-            @Override
-            public Object getKey(final ContactDTO item) {
-                return (item == null) ? null : item.getId();
-            }
-        };
-        table.setAutoHeaderRefreshDisabled(true);
-        table.setAutoFooterRefreshDisabled(true);
-        final TextColumn<ContactDTO> nameColumn = new TextColumn<ContactDTO>() {
-            @Override
-            public String getValue(final ContactDTO value) {
-                return value.getFullName();
-            }
-        };
-        Column<ContactDTO, SafeHtml> editColumn = new Column<ContactDTO, SafeHtml>(new SafeHtmlCell()) {
-            @Override
-            public SafeHtml getValue(ContactDTO contactDTO) {
-                SafeHtmlBuilder sb = new SafeHtmlBuilder();
-                sb.appendHtmlConstant("<a>");
-                sb.appendEscaped("Remove");
-                sb.appendHtmlConstant("</a>");
-                return sb.toSafeHtml();
-            }
-        };
-        editColumn.setFieldUpdater(new FieldUpdater<ContactDTO, SafeHtml>() {
-            @Override
-            public void update(final int index, final ContactDTO contact, final SafeHtml value) {
+	@UiHandler("addButton")
+	void onAddButtonClicked(ClickEvent event)
+	{
+		if (_presenter != null)
+		{
+			_presenter.onAddButtonClicked();
+		}
+	}
 
-                final IContactsServiceAsync rpcService = (IContactsServiceAsync) GWT.create(ContactsService.class);
-                rpcService.deleteContact(contact.getId(), new AsyncCallback<Boolean>() {
-                    public void onSuccess(Boolean result) {
-                        table.redraw();
-                    }
+	private void buildTable()
+	{
+		_table = new CellTable();
+		new ProvidesKey<ContactDTO>()
+		{
+			@Override
+			public Object getKey(final ContactDTO item)
+			{
+				return (item == null) ? null : item.getId();
+			}
+		};
+		_table.setAutoHeaderRefreshDisabled(true);
+		_table.setAutoFooterRefreshDisabled(true);
+		final TextColumn<ContactDTO> nameColumn = new TextColumn<ContactDTO>()
+		{
+			@Override
+			public String getValue(final ContactDTO value)
+			{
+				return value.getFullName();
+			}
+		};
+		Column<ContactDTO, SafeHtml> editColumn = new Column<ContactDTO, SafeHtml>(new ClickableSafeHtmlCell())
+		{
+			@Override
+			public SafeHtml getValue(ContactDTO contactDTO)
+			{
+				SafeHtmlBuilder sb = new SafeHtmlBuilder();
+				sb.appendHtmlConstant("<a>");
+				sb.appendEscaped(REMOVE);
+				sb.appendHtmlConstant("</a>");
+				return sb.toSafeHtml();
+			}
+		};
+		editColumn.setFieldUpdater(new FieldUpdater<ContactDTO, SafeHtml>()
+		{
+			@Override
+			public void update(final int index, final ContactDTO contact, final SafeHtml value)
+			{
 
-                    public void onFailure(Throwable caught) {
+				final ContactsServiceAsync rpcService = GWT.create(ContactsService.class);
+				rpcService.deleteContact(contact.getId(), new AsyncCallback<Boolean>()
+				{
+					public void onSuccess(Boolean result)
+					{
+						_rowData.remove(contact);
+						setRowData(_rowData);
+						_table.redraw();
+					}
 
-                    }
-                });
-            }
+					public void onFailure(Throwable caught)
+					{
+						LOG.severe(caught.toString());
+						Window.alert(UserMessages.ERROR_DELETING_CONTACT);
+					}
+				});
+			}
 
-        });
-        // addColumn(goalKeyColumn, Resource.ID);
-        table.addColumn(nameColumn, "Name");
-        table.addColumn(editColumn, "");
-        table.setColumnWidth(editColumn, 100.0, Style.Unit.PX);
+		});
+		_table.addColumn(nameColumn, CONTACT_NAME);
+		_table.addColumn(editColumn, EMPTY_STRING);
+		_table.setColumnWidth(editColumn, 100.0, Style.Unit.PX);
+		verticalPanel.add(_table);
+	}
 
-        verticalPanel.add(table);
-    }
+	@UiHandler("refreshButton")
+	void onRefreshButtonClicked(ClickEvent event)
+	{
+		if (_presenter != null)
+		{
+			_presenter.onRefreshButtonClicked();
+		}
+	}
 
-    private List<ContactDTO> _data;
-    private ListDataProvider<ContactDTO> _dataProvider;
+	public Widget asWidget()
+	{
+		return this;
+	}
 
-
-    @UiHandler("refreshButton")
-    void onRefreshButtonClicked(ClickEvent event) {
-        if (presenter != null) {
-            presenter.onRefreshButtonClicked();
-        }
-    }
-
-
-    public Widget asWidget() {
-        return this;
-    }
-
-    @UiTemplate("ContactsView.ui.xml")
-    interface ContactsViewUiBinder extends UiBinder<Widget, ContactsView> {
-    }
+	@UiTemplate("ContactsView.ui.xml")
+	interface ContactsViewUiBinder extends UiBinder<Widget, ContactsView>
+	{
+	}
 }

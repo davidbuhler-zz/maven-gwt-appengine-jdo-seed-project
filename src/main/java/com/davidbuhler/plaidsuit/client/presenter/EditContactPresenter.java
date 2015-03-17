@@ -1,6 +1,6 @@
 package com.davidbuhler.plaidsuit.client.presenter;
 
-import com.davidbuhler.plaidsuit.client.IContactsServiceAsync;
+import com.davidbuhler.plaidsuit.client.ContactsServiceAsync;
 import com.davidbuhler.plaidsuit.client.event.*;
 import com.davidbuhler.plaidsuit.shared.dto.ContactDTO;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -23,12 +23,12 @@ import java.util.logging.Logger;
 
 public class EditContactPresenter implements Presenter {
     private static final Logger LOG = Logger.getLogger(EditContactPresenter.class.getName());
-    private final IContactsServiceAsync rpcService;
+    private final ContactsServiceAsync rpcService;
     private final HandlerManager eventBus;
     private final Display display;
     private ContactDTO contactDTO;
 
-    public EditContactPresenter(IContactsServiceAsync rpcService, HandlerManager eventBus, Display display) {
+    public EditContactPresenter(ContactsServiceAsync rpcService, HandlerManager eventBus, Display display) {
         this.rpcService = rpcService;
         this.eventBus = eventBus;
         this.contactDTO = new ContactDTO();
@@ -76,7 +76,7 @@ public class EditContactPresenter implements Presenter {
         });
     }
 
-    public EditContactPresenter(IContactsServiceAsync rpcService, HandlerManager eventBus, Display display, String id) {
+    public EditContactPresenter(ContactsServiceAsync rpcService, HandlerManager eventBus, Display display, String id) {
         this.rpcService = rpcService;
         this.eventBus = eventBus;
         this.display = display;

@@ -1,6 +1,5 @@
 package com.davidbuhler.plaidsuit.server;
 
-import com.davidbuhler.plaidsuit.client.IContactsService;
 import com.davidbuhler.plaidsuit.server.entity.Contact;
 import com.davidbuhler.plaidsuit.shared.constants.UserMessages;
 import com.davidbuhler.plaidsuit.shared.dto.ContactDTO;
@@ -26,12 +25,13 @@ import java.util.logging.Level;
 
 
 @SuppressWarnings("serial")
-public class ContactsService extends RemoteServiceServlet implements IContactsService {
+public class ContactsServiceImpl extends RemoteServiceServlet implements com.davidbuhler.plaidsuit.client.ContactsService
+{
 
-    private static final Logger LOG = LoggerFactory.getLogger(ContactsService.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ContactsServiceImpl.class.getName());
     private static final PersistenceManagerFactory PMF = JDOHelper.getPersistenceManagerFactory("transactions-optional");
 
-    public ContactsService() {
+    public ContactsServiceImpl() {
     }
 
     public ContactDTO saveContact(ContactDTO contactDTO) throws BroadCastableException {

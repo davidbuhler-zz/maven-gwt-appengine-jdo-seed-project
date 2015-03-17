@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.company</groupId>
-	<artifactId>product</artifactId>
+	<artifactId>plaidsuit</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>Plaid-Suit</name>
 	<description>Project to demonstrate GWT, AppEngine and JDO integration with Maven</description>
-	<url>https://github.com/worknperk/lifecycle</url>
+	<url>https://github.com/davidbuhler/maven-gwt-appengine-jdo-seed-project</url>
 	<properties>
 		<appengine.version>1.9.18</appengine.version>
 		<datanucleus.appengine.version>2.1.2</datanucleus.appengine.version>
@@ -32,7 +32,7 @@
 		<slf4j-api.version>1.6.1</slf4j-api.version>
 	</properties>
 	<issueManagement>
-		<url>https://github.com/worknperk/lifecycle/issuess</url>
+		<url>https://github.com/davidbuhler/maven-gwt-appengine-jdo-seed-project/issuess</url>
 		<system>GitHub Issues</system>
 	</issueManagement>
 	<licenses>

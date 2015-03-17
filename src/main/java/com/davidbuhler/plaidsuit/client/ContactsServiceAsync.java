@@ -5,7 +5,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.List;
 
-public interface IContactsServiceAsync
+public interface ContactsServiceAsync
 {
 	void saveContact(ContactDTO contactDTO, AsyncCallback<ContactDTO> callback);
 
